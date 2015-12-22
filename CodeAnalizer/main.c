@@ -21,8 +21,14 @@
  如果前面半句是有效行，后面有注释，则算做是有效行
  */
 #define PATH "/Users/qianfeng/Documents/day02/赵晓东develop_project/gps/function.c"
-#define DIRPATH "/Users/qianfeng/Documents/day02/gprs_project_zhouchaofeng"//"/Users/qianfeng/Documents/day02/郧亚锋good_ftp/client"//"/Users/qianfeng/Documents/day02/赵晓东develop_project/gps"
-
+#define DIRPATHC1 "/Users/qianfeng/Documents/day02/gprs_project_zhouchaofeng"
+#define DIRPATHC2 "/Users/qianfeng/Documents/day02/郧亚锋good_ftp/client"
+#define DIRPATHC3 "/Users/qianfeng/Documents/day02/赵晓东develop_project/gps"
+#define DIRPATHOC1 "/Users/qianfeng/Documents/ios1504/study/categoryDemo3/categoryDemo3"
+#define DIRPATHOC2 "/Users/qianfeng/Documents/ios1504/study/通讯录/通讯录"
+#define DIRPATHCPP "/Users/qianfeng/Downloads/C  项目/C++项目/C++项目"
+#define DIRPATHSWIFT "/Users/qianfeng/Desktop/Swift2048-009"
+#define DIRPATH "/Users/qianfeng/Desktop/Swift2048"
 void delay()
 {
     for (int i = 0; i < 500000; i++) {
@@ -30,19 +36,51 @@ void delay()
         i--;
     }
 }
+void outputFolderResult(int c, int cpp, int oc, int header, int swift, int others)
+{
+    printf("total %d files", c + cpp + oc + swift + others + header);
+    if (c > 0) {
+        printf(", %d c",c);
+    }
+    if (cpp > 0) {
+        printf(", %d c++",cpp);
+    }
+    if (oc > 0) {
+        printf(", %d OC",oc);
+    }
+    if (header > 0) {
+        printf(", %d c&&oc&&c++ header",header);
+    }
+    if (swift > 0) {
+        printf(", %d swift",swift);
+    }
+    if (others > 0) {
+        printf(", %d other files", others);
+    }
+    printf("\n");
+}
 int main(int argc, const char * argv[]) {
     // insert code here...
 
     char buf[200] = {};
     DIR * dir = NULL;
     struct dirent * entry;
-    
+    char * fileType = NULL;
+    //各类文件的个数
+    int cSourceFile = 0;
+    int ocSourceFile = 0;
+    int swiftFile = 0;
+    int others = 0;
+    int headerFile = 0;
+    int cPlusPlusFile = 0;
+
     //打开目录，
     dir = opendir(DIRPATH);
     if (!dir) {
         perror("open dir error");
         return 1;
     }
+    startMenu();
     //读取目录，获得里面的文件名
     while(1){
         entry = readdir(dir);
@@ -54,35 +92,58 @@ int main(int argc, const char * argv[]) {
         if (!hasSuffix(buf, "/")) {
             strcat(buf, "/");
         }
+        //把文件路径和文件名放在buf这个数组中
         strcat(buf, entry->d_name);
-        //printf("%s\n",buf);
-        delay();
+
         //打开文件进行分析
         FILE * fp = fopen(buf, "r");
         //新打开文件，初始化全局变量
-        printf("%s\t\tinit\n",entry->d_name);
         initGlobalVariables();
+        
         switch (getFileType(buf)) {
             case C_LANGUAGE_SOURCE:
-                printf("%s\t\t\n",entry->d_name);
+                fileType = "  c  ";
+                printf("%-30s  %6s",entry->d_name,fileType);
                 analizeCSourceFile(fp);
+                cSourceFile++;
                 break;
                 //return 0;
             case C_PLUS_PLUS_SOURCE:
+                fileType = " c++ ";
+                printf("%-30s  %6s",entry->d_name,fileType);
+                analizeCPlusPlusSourceFile(fp);
+                cPlusPlusFile++;
                 break;
             case SWIFT_FILE:
+                fileType = "swift";
+                printf("%-30s  %6s",entry->d_name,fileType);
+                analizeSwiftSourceFile(fp);
+                swiftFile++;
                 break;
             case OC_SOURCE:
+                fileType = " OC ";
+                printf("%-30s  %6s",entry->d_name,fileType);
+                analizeOCSourceFile(fp);
+                ocSourceFile++;
                 break;
-            case HERDER_FILE:
+            case HEADER_FILE:
+                
+                fileType = "header";
+                printf("%-30s  %6s",entry->d_name,fileType);
+                analizeHeaderSourceFile(fp);
+                headerFile++;
             case OTHRES:
+                others++;
                 break;
             default:
                 break;
         }
-  
         fclose(fp);
     }
+    endMenu();
+    outputFolderResult(cSourceFile, cPlusPlusFile, ocSourceFile, headerFile, swiftFile, others);
+    
     closedir(dir);
+    endMenu();
     return 0;
 }

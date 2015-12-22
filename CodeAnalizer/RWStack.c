@@ -46,6 +46,7 @@ void push(STACK_TYPE value)
     assert(!is_full()); /* 压入堆栈之前先判断是否堆栈已满*/
     top_element += 1;
     stack[top_element] = value;
+//    printf("<--%c\n", value);
     switch (value) {
         case 'l':
         case 'L':
@@ -72,13 +73,14 @@ void push(STACK_TYPE value)
 /* pop */
 void pop(void)
 {
+//    printf("-->%c\n", stack[top_element]);
     assert(!is_empty()); /* 弹出堆栈之前先判断是否堆栈已空 */
     switch (stack[top_element]) {
-        case 'l':
+        case 'l'://注释
         case 'L':
             hasLeftAnnotations--;
             break;
-        case 'r':
+        case 'r'://注释
         case 'R':
             hasRightAnnotations--;
             break;

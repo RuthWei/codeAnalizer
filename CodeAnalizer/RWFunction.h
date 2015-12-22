@@ -33,5 +33,8 @@
 /*
  是否是函数，是返回1，不是则返回0
  */
-int isFunction(const char * str);
+int isCLanguageFunction(const char * str);
+int isCPlusPlusFunction(const char * str);
+int isOCFunction(const char * str);
+int isSwiftFunction(const char * str);
 #endif /* defined(__CodeAnalizer__RWFunction__) */

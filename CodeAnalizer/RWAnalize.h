@@ -17,4 +17,6 @@ void initGlobalVariables();
 void analizeCSourceFile(FILE * fp);
 void analizeCPlusPlusSourceFile(FILE * fp);
 void analizeOCSourceFile(FILE * fp);
+void analizeHeaderSourceFile(FILE * fp);
+void analizeSwiftSourceFile(FILE * fp);
 #endif /* defined(__CodeAnalizer__RWAnalize__) */

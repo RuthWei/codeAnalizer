@@ -109,29 +109,36 @@ int isPreprocessStatements(const char * str)
 int isBlankLine(const char * str)
 {
     int ret = TRUE;
-    if (hasLeftAnnotations > 0) {
+    if (hasLeftAnnotations > 0 || halfCommnetLine > 0) {
         //栈里有左多行注释,并且在栈顶
         //if (LeftAnnotations == top())
         {
             ret = FALSE;
         }
     }
-    //如果该行只有\n，则是空行
-    if ('\n' == *str) {
+    //如果该行只有\n或者\r\n或者什么都没有（文件的最后一行），，则是空行
+    else if (!strcmp(str, "\n")
+          || !strcmp(str, "\r\n")
+          || !strcmp(str, "")) {
         ret = TRUE;
     }
-    //如果该行除去空格、\t、\n，再没有其它字符，那么它也是空行
-    while (*str) {
-        if (*str != ' '
-         && *str != '\n'
-         && *str != '\t') {
-            ret =  FALSE;
-            break;
-        }
-        str++;
+    else
+    {
+        ret = FALSE;
     }
+//    //如果该行除去空格、\t、\n，再没有其它字符，那么它也是空行
+//    while (*str) {
+//        if (*str != ' '
+//         && *str != '\n'
+//         && *str != '\r'
+//         && *str != '\t') {
+//            ret =  FALSE;
+//            break;
+//        }
+//        str++;
+//    }
     //如果不是以\n结尾，则是半个空行
-    if (!hasSuffix(str, "\n") && ret) {
+    if (ret && !hasSuffix(str, "\n")) {
         halfBlankLine = 1;
     }
     else
@@ -148,54 +155,70 @@ int isBlankLine(const char * str)
  */
 int isCommnetLine(const char * str)
 {
-    int ret = FALSE;
+//    int ret = FALSE;
+    
     //以//开头
-    if (hasPrefix(str, "//")) {
-        ret = TRUE;
-    }
-    //或者/星星/中间的部分
-    
-//    //如果是左多行注释和右多行注释
-//    if (hasPrefix(str, "/*") && hasSuffix(str, "*/\n"))
-//    {
-//        ret = TRUE;
-//    }
-    //如果是左多行注释，没有右多行注释，则入栈
-    if (hasPrefix(str, "/*")) {
-        push('l');
-        ret = TRUE;
-    }
-    
-    //如果是右多行注释
-    if (hasPrefix(str, "*/") || hasSuffix(str, "*/\n"))
-    {
-        //判断是不是上一个多行注释的另一半
-        if (hasLeftAnnotations > 0) {
-            //栈里有左多行注释,并且在栈顶
-            if (LeftAnnotations == top()) {
-                //出栈
-                pop();
-            }
+    if (hasPrefix(str, "//")){
+        //以//开头,是一条完整的注释
+        if (hasSuffix(str, "\n")) {
+        return TRUE;
         }
-        ret = TRUE;
-    }
-    
-    if (hasLeftAnnotations > 0) {
-        //栈里有左多行注释,并且在栈顶
-        //if (LeftAnnotations == top())
+        //以//开头,不是一条完整的注释
+        else if (!hasSuffix(str, "\n"))
         {
-            ret = TRUE;
+            halfCommnetLine++;
+            return FALSE;
         }
     }
-    
-    if (!hasSuffix(str, "\n") && ret == TRUE) {
-        halfCommnetLine = 1;
+    //如果是开头是左多行注释
+    else if (hasPrefix(str, "/*")){
+        //一条注释的一半,没有右多行注释
+        if (!strstr(str, "*/")
+        &&  !hasSuffix(str, "\n")) {
+            push('l');
+            halfCommnetLine++;
+            return FALSE;
+        }
+        //是一条完整的注释
+        else if (strstr(str, "*/\n")
+              || strstr(str, "*/\r\n")){
+            return TRUE;
+        }
+        //开头是左多行注释，结尾是换行，是注释的一半，是一条注释
+        else if (hasSuffix(str, "\n")) {
+            push('l');
+            //halfCommnetLine++;
+            return TRUE;
+        }
+        else
+        {
+            
+        }
     }
-    else
-    {
-        halfCommnetLine = 0;
+    //注释开头没有//也没有左多行，这是上一个注释的一半
+    else if (halfCommnetLine > 0 || hasLeftAnnotations > 0){
+        if (hasSuffix(str, "*/\n")
+        ||  hasSuffix(str, "*/\r\n")) {
+            //判断是不是上一个多行注释的另一半
+            if (hasLeftAnnotations > 0) {
+                //栈里有左多行注释,并且在栈顶
+                if (LeftAnnotations == top()) {
+                    //出栈
+                    pop();
+                }
+            }
+            return TRUE;
+        }
+        else if (hasSuffix(str, "\n")){
+            halfCommnetLine = 0;
+            return TRUE;
+        }
+        else//一行不完整
+        {
+            return FALSE;
+        }
     }
-    return ret;
+    return FALSE;
 }
 
 //分析文件中的每一行，返回总行号
@@ -207,12 +230,12 @@ int lineAnalize(const char * p)
         uiBlankLineNum++;
     }
     //注释行
-    else if (!halfCommnetLine && isCommnetLine(p))
+    else if (isCommnetLine(p) && !halfCommnetLine )
     {
         uiAnnotationLineNum++;
     }
     //有效代码行
-    else if (!halfEffectiveCodeLine)
+    else if (!halfCommnetLine && !halfEffectiveCodeLine )
     {
         uiEffectiveCodeLineNum++;
 //        printf("%s",p);

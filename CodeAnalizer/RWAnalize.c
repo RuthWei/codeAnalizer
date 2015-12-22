@@ -16,7 +16,7 @@
 FILE_TYPE_E getFileType(const char * path)
 {
     if (hasSuffix(path, ".h")) {
-        return HERDER_FILE;
+        return HEADER_FILE;
     }
     else if (hasSuffix(path, ".c")){
         return C_LANGUAGE_SOURCE;
@@ -65,6 +65,10 @@ void initGlobalVariables()
     hasRightAnnotations = 0;
 }
 
+void outputResult()
+{
+    printf("%8d%10d%10d%10d\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum,uiFunctionNum);
+}
 void analizeCSourceFile(FILE * fp)
 {
     char buf[200] = {};
@@ -82,11 +86,103 @@ void analizeCSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        uiFunctionNum += isFunction(p);
+        uiFunctionNum += isCLanguageFunction(p);
     }
     
-    printf("空行%d有效代码行%d注释行%d\t\t",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum);
-    printf("总行数%d，总函数个数%d\n",totalLine,uiFunctionNum);
+    outputResult();
+//    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
 }
-void analizeCPlusPlusSourceFile(FILE * fp);
-void analizeOCSourceFile(FILE * fp);
+void analizeCPlusPlusSourceFile(FILE * fp)
+{
+    char buf[200] = {};
+    int totalLine = 0;
+    //文件指针不存在
+    if (!fp) {
+        printf("open file error\n");
+        exit(1);
+    }
+    //文件没有读完，接着分析
+    while (!feof(fp)) {
+        memset(buf, 0, sizeof(buf));
+        fgets(buf, 199, fp);//buf太小一行没有全部读完
+        
+        //避开行首的空格和\t
+        char * p = ignoreSpaceInString(buf);
+        totalLine += lineAnalize(p);
+        uiFunctionNum += isCPlusPlusFunction(p);
+    }
+    
+    outputResult();
+    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
+}
+void analizeOCSourceFile(FILE * fp)
+{
+    char buf[200] = {};
+    int totalLine = 0;
+    //文件指针不存在
+    if (!fp) {
+        printf("open file error\n");
+        exit(1);
+    }
+    //文件没有读完，接着分析
+    while (!feof(fp)) {
+        memset(buf, 0, sizeof(buf));
+        fgets(buf, 199, fp);//buf太小一行没有全部读完
+        
+        //避开行首的空格和\t
+        char * p = ignoreSpaceInString(buf);
+        totalLine += lineAnalize(p);
+        uiFunctionNum += isOCFunction(p);
+    }
+    
+    outputResult();
+    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
+}
+
+void analizeSwiftSourceFile(FILE * fp)
+{
+    char buf[200] = {};
+    int totalLine = 0;
+    //文件指针不存在
+    if (!fp) {
+        printf("open file error\n");
+        exit(1);
+    }
+    //文件没有读完，接着分析
+    while (!feof(fp)) {
+        memset(buf, 0, sizeof(buf));
+        fgets(buf, 199, fp);//buf太小一行没有全部读完
+        
+        //避开行首的空格和\t
+        char * p = ignoreSpaceInString(buf);
+        totalLine += lineAnalize(p);
+        uiFunctionNum += isSwiftFunction(p);
+    }
+    
+    outputResult();
+    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
+}
+
+void analizeHeaderSourceFile(FILE * fp)
+{
+    char buf[200] = {};
+    int totalLine = 0;
+    //文件指针不存在
+    if (!fp) {
+        printf("open file error\n");
+        exit(1);
+    }
+    //文件没有读完，接着分析
+    while (!feof(fp)) {
+        memset(buf, 0, sizeof(buf));
+        fgets(buf, 199, fp);//buf太小一行没有全部读完
+        
+        //避开行首的空格和\t
+        char * p = ignoreSpaceInString(buf);
+        totalLine += lineAnalize(p);
+        //uiFunctionNum += isFunctionDeclare(p);
+    }
+    
+    printf("%8d%10d%10d         *\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum);
+    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
+}

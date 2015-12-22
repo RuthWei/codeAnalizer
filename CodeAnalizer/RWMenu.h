@@ -10,15 +10,15 @@
 #define __CodeAnalizer__RWMenu__
 
 #include <stdio.h>
-
 typedef enum fileType
 {
-    HERDER_FILE,
+    HEADER_FILE,
     C_LANGUAGE_SOURCE,
     C_PLUS_PLUS_SOURCE,
     OC_SOURCE,
     SWIFT_FILE,
     OTHRES,
 }FILE_TYPE_E;
-
+void endMenu();
+void startMenu();
 #endif /* defined(__CodeAnalizer__RWMenu__) */
