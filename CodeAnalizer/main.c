@@ -15,27 +15,15 @@
 #include "RWMenu.h"
 #include "RWAnalize.h"
 #include "RWLine.h"
+
 /*
- 判断一个Ｃ语言源文件的行数
+ 判断一个文件的行数
  总行数＝空行行数＋注释行数＋有效行数
  如果前面半句是有效行，后面有注释，则算做是有效行
  */
-#define PATH "/Users/qianfeng/Documents/day02/赵晓东develop_project/gps/function.c"
-#define DIRPATHC1 "/Users/qianfeng/Documents/day02/gprs_project_zhouchaofeng"
-#define DIRPATHC2 "/Users/qianfeng/Documents/day02/郧亚锋good_ftp/client"
-#define DIRPATHC3 "/Users/qianfeng/Documents/day02/赵晓东develop_project/gps"
-#define DIRPATHOC1 "/Users/qianfeng/Documents/ios1504/study/categoryDemo3/categoryDemo3"
-#define DIRPATHOC2 "/Users/qianfeng/Documents/ios1504/study/通讯录/通讯录"
-#define DIRPATHCPP "/Users/qianfeng/Downloads/C  项目/C++项目/C++项目"
-#define DIRPATHSWIFT "/Users/qianfeng/Desktop/Swift2048-009"
-#define DIRPATH "/Users/qianfeng/Desktop/Swift2048"
-void delay()
-{
-    for (int i = 0; i < 500000; i++) {
-        i++;
-        i--;
-    }
-}
+
+//#define DIRPATH "/Users/qianfeng/Documents/day02/赵晓东develop_project/gps"
+
 void outputFolderResult(int c, int cpp, int oc, int header, int swift, int others)
 {
     printf("total %d files", c + cpp + oc + swift + others + header);
@@ -73,6 +61,10 @@ int main(int argc, const char * argv[]) {
     int others = 0;
     int headerFile = 0;
     int cPlusPlusFile = 0;
+
+    char DIRPATH[100] = {};
+    printf("input file path \n");
+    scanf("%99s", DIRPATH);
 
     //打开目录，
     dir = opendir(DIRPATH);

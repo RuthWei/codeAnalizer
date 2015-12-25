@@ -127,16 +127,7 @@ int isBlankLine(const char * str)
         ret = FALSE;
     }
 //    //如果该行除去空格、\t、\n，再没有其它字符，那么它也是空行
-//    while (*str) {
-//        if (*str != ' '
-//         && *str != '\n'
-//         && *str != '\r'
-//         && *str != '\t') {
-//            ret =  FALSE;
-//            break;
-//        }
-//        str++;
-//    }
+
     //如果不是以\n结尾，则是半个空行
     if (ret && !hasSuffix(str, "\n")) {
         halfBlankLine = 1;

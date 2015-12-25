@@ -10,7 +10,7 @@
 #include "RWStack.h"
 #include "RWLine.h"
 #include "RWFunction.h"
-
+#include "RWMenu.h"
 
 //分析文件类型，c, c++, oc, 头文件
 FILE_TYPE_E getFileType(const char * path)
@@ -67,7 +67,7 @@ void initGlobalVariables()
 
 void outputResult()
 {
-    printf("%8d%10d%10d%10d\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum,uiFunctionNum);
+    printf("%8d%10d%10d\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum);
 }
 void analizeCSourceFile(FILE * fp)
 {
@@ -86,11 +86,10 @@ void analizeCSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        uiFunctionNum += isCLanguageFunction(p);
+        //uiFunctionNum += isCLanguageFunction(p);
     }
     
     outputResult();
-//    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
 }
 void analizeCPlusPlusSourceFile(FILE * fp)
 {
@@ -109,11 +108,10 @@ void analizeCPlusPlusSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        uiFunctionNum += isCPlusPlusFunction(p);
+        
     }
     
     outputResult();
-    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
 }
 void analizeOCSourceFile(FILE * fp)
 {
@@ -132,11 +130,10 @@ void analizeOCSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        uiFunctionNum += isOCFunction(p);
+        
     }
     
     outputResult();
-    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
 }
 
 void analizeSwiftSourceFile(FILE * fp)
@@ -156,11 +153,10 @@ void analizeSwiftSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        uiFunctionNum += isSwiftFunction(p);
+        
     }
     
     outputResult();
-    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
 }
 
 void analizeHeaderSourceFile(FILE * fp)
@@ -180,9 +176,7 @@ void analizeHeaderSourceFile(FILE * fp)
         //避开行首的空格和\t
         char * p = ignoreSpaceInString(buf);
         totalLine += lineAnalize(p);
-        //uiFunctionNum += isFunctionDeclare(p);
     }
-    
-    printf("%8d%10d%10d         *\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum);
-    //    printf("总行数%d，总函数个数%d\n",uiBlankLineNum+uiEffectiveCodeLineNum+uiAnnotationLineNum,uiFunctionNum);
+
+    printf("%8d%10d%10d\n",uiBlankLineNum,uiEffectiveCodeLineNum,uiAnnotationLineNum);
 }

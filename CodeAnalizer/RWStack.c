@@ -14,7 +14,7 @@
  ** 静态数组实现堆栈程序 ，数组长度由#define确定
  */
 
-#define STACK_SIZE 100 /* 堆栈最大容纳元素数量 */
+#define STACK_SIZE 200 /* 堆栈最大容纳元素数量 */
 //栈里有未配对的（
 int hasLeftSmallBrackets = 0;
 //栈里有未配对的［
@@ -46,7 +46,7 @@ void push(STACK_TYPE value)
     assert(!is_full()); /* 压入堆栈之前先判断是否堆栈已满*/
     top_element += 1;
     stack[top_element] = value;
-//    printf("<--%c\n", value);
+//    printf("i<--%c%d\n", value,top_element);
     switch (value) {
         case 'l':
         case 'L':
@@ -73,7 +73,7 @@ void push(STACK_TYPE value)
 /* pop */
 void pop(void)
 {
-//    printf("-->%c\n", stack[top_element]);
+//    printf("o-->%c%d\n", stack[top_element],top_element-1);
     assert(!is_empty()); /* 弹出堆栈之前先判断是否堆栈已空 */
     switch (stack[top_element]) {
         case 'l'://注释

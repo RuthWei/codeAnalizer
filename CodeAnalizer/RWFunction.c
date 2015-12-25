@@ -12,14 +12,208 @@
 
 int isCPlusPlusFunction(const char * str)
 {
+    const char * pSpace = NULL;
+    const char * start = str;
+    int ret = FALSE;
+    //注释行
+    if (halfCommnetLine || isCommnetLine(str))
+    {
+        return FALSE;
+    }
+    
+    while (*str){
+        switch (*str) {
+            case ' ':
+                if (!pSpace){
+                    pSpace = str;//查找空格的位置
+                    halfFunctionLine |= SPACE;
+                    //在进入该函数之前已经删除了字符串开头的空格
+                    //所以目前空格前面一定是有字符串的，暂时把这个字符串当作返回值
+                    halfFunctionLine |= RETURNTYPE;
+                }
+                break;
+            case '(':
+                //有左小括号，则入栈
+                push('(');
+                //左小括号前面是函数名
+                halfFunctionLine |= FUNCNAME;
+                halfFunctionLine |= LEFTSBRACKET;
+                break;
+            case ')':
+                //如果栈顶是‘(’,正好配对，出栈
+                if (top() == '(') {
+                    pop();
+                }else{
+                    //如果栈顶不是‘(’,不能配对，入栈
+                    push(')');
+                }
+                halfFunctionLine |= RIGHTSBRACKET;
+                break;
+            case '{':
+                push('{');
+                halfFunctionLine |= LEFTLBRACKET;
+                break;
+            case '}':
+                if (top() == '{') {
+                    pop();
+                }
+                else{
+                    push('}');
+                }
+                halfFunctionLine |= RIGHTLBRACKET;
+                break;
+            default:
+                break;
+        }
+        str++;
+    }
+    
+    //目前的格式是：标识符，空格，标识符（）
+    if (is_empty()
+        && strstr(start, "}\n")
+        && halfFunctionLine == FUNCTION) {
+        halfFunctionLine = 0;
+        ret = TRUE;
+    }
+    
     return 0;
 }
 int isOCFunction(const char * str)
 {
+//    const char * pSpace = NULL;
+    const char * start = str;
+    int ret = FALSE;
+//    int funcType = FALSE;
+    //注释行
+    if (halfCommnetLine || isCommnetLine(str))
+    {
+        return FALSE;
+    }
+    //ＯＣ兼容Ｃ，如果是Ｃ语言函数，那它一定是ＯＣ的函数
+    if (isCLanguageFunction(str))
+    {
+        return TRUE;
+    }
+    if (*str == '-' || *str == '+') {
+        //funcType = TRUE;
+        halfFunctionLine |= SPACE;
+    }
+    
+    while (*str){
+        switch (*str) {
+            case '(':
+                //有左小括号，则入栈
+                push('(');
+                halfFunctionLine |= LEFTSBRACKET;
+                break;
+            case ')':
+                //如果栈顶是‘(’,正好配对，出栈
+                if (top() == '(') {
+                    pop();
+                }else{
+                    //如果栈顶不是‘(’,不能配对，入栈
+                    push(')');
+                }
+                halfFunctionLine |= RIGHTSBRACKET;
+                //右小括号后面是函数名
+                halfFunctionLine |= FUNCNAME;
+                //括号里面是返回值类型
+                halfFunctionLine |= RETURNTYPE;
+                break;
+            case '{':
+                push('{');
+                halfFunctionLine |= LEFTLBRACKET;
+                break;
+            case '}':
+                if (top() == '{') {
+                    pop();
+                }
+                else{
+                    push('}');
+                }
+                halfFunctionLine |= RIGHTLBRACKET;
+                break;
+            default:
+                break;
+        }
+        str++;
+    }
+    
+    //目前的格式是：标识符，空格，标识符（）
+    if (is_empty()
+//        && funcType == TRUE
+        && strstr(start, "}\n")
+        && halfFunctionLine == FUNCTION) {
+        halfFunctionLine = 0;
+        ret = TRUE;
+    }
     return 0;
 }
 int isSwiftFunction(const char * str)
 {
+    const char * pSpace = NULL;
+    const char * start = str;
+    int ret = FALSE;
+    //注释行
+    if (halfCommnetLine || isCommnetLine(str))
+    {
+        return FALSE;
+    }
+    
+    while (*str){
+        switch (*str) {
+            case ' ':
+                if (!pSpace){
+                    pSpace = str;//查找空格的位置
+                    halfFunctionLine |= SPACE;
+                    //在进入该函数之前已经删除了字符串开头的空格
+                    //所以目前空格前面一定是有字符串的，暂时把这个字符串当作返回值
+                    halfFunctionLine |= RETURNTYPE;
+                }
+                break;
+            case '(':
+                //有左小括号，则入栈
+                push('(');
+                //左小括号前面是函数名
+                halfFunctionLine |= FUNCNAME;
+                halfFunctionLine |= LEFTSBRACKET;
+                break;
+            case ')':
+                //如果栈顶是‘(’,正好配对，出栈
+                if (top() == '(') {
+                    pop();
+                }else{
+                    //如果栈顶不是‘(’,不能配对，入栈
+                    push(')');
+                }
+                halfFunctionLine |= RIGHTSBRACKET;
+                break;
+            case '{':
+                push('{');
+                halfFunctionLine |= LEFTLBRACKET;
+                break;
+            case '}':
+                if (top() == '{') {
+                    pop();
+                }
+                else{
+                    push('}');
+                }
+                halfFunctionLine |= RIGHTLBRACKET;
+                break;
+            default:
+                break;
+        }
+        str++;
+    }
+    
+    //目前的格式是：标识符，空格，标识符（）
+    if (is_empty()
+        && strstr(start, "}\n")
+        && halfFunctionLine == FUNCTION) {
+        halfFunctionLine = 0;
+        ret = TRUE;
+    }
     return 0;
 }
 /*

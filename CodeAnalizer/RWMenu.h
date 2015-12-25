@@ -10,6 +10,7 @@
 #define __CodeAnalizer__RWMenu__
 
 #include <stdio.h>
+
 typedef enum fileType
 {
     HEADER_FILE,

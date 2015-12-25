@@ -9,11 +9,10 @@
 #include "RWMenu.h"
 void endMenu()
 {
-    printf("==================================================================================\n");
+    printf("===========================================================================\n");
 }
 void startMenu()
 {
-    printf("\n===============================Code        Analizer===============================\n\n");
-    printf("===file name===================language===blank===effecitve===comments===function=\n");
-    //printf("=file name===blank===effecitve===comments===function=\n");
+    printf("\n=============================Code        Analizer==========================\n\n");
+    printf("===file name===================language===blank===effecitve===comments=====\n");
 }
