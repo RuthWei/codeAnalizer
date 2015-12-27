@@ -12,7 +12,6 @@
 		BCC562261C23AADD00105089 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC562251C23AADD00105089 /* main.c */; };
 		BCC5622E1C23AD5700105089 /* RWStack.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC5622C1C23AD5700105089 /* RWStack.c */; };
 		BCC562311C23B0DD00105089 /* RWLine.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC5622F1C23B0DD00105089 /* RWLine.c */; };
-		BCC562341C23B13400105089 /* RWFunction.c in Sources */ = {isa = PBXBuildFile; fileRef = BCC562321C23B13400105089 /* RWFunction.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,8 +37,6 @@
 		BCC5622D1C23AD5700105089 /* RWStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWStack.h; sourceTree = "<group>"; };
 		BCC5622F1C23B0DD00105089 /* RWLine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RWLine.c; sourceTree = "<group>"; };
 		BCC562301C23B0DD00105089 /* RWLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWLine.h; sourceTree = "<group>"; };
-		BCC562321C23B13400105089 /* RWFunction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RWFunction.c; sourceTree = "<group>"; };
-		BCC562331C23B13400105089 /* RWFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWFunction.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,8 +76,6 @@
 				BC55F9311C24D4EB001C76F5 /* RWAnalize.c */,
 				BCC562301C23B0DD00105089 /* RWLine.h */,
 				BCC5622F1C23B0DD00105089 /* RWLine.c */,
-				BCC562331C23B13400105089 /* RWFunction.h */,
-				BCC562321C23B13400105089 /* RWFunction.c */,
 				BCC5622D1C23AD5700105089 /* RWStack.h */,
 				BCC5622C1C23AD5700105089 /* RWStack.c */,
 			);
@@ -143,7 +138,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCC562341C23B13400105089 /* RWFunction.c in Sources */,
 				BCC562311C23B0DD00105089 /* RWLine.c in Sources */,
 				BC55F9301C24D2E2001C76F5 /* RWMenu.c in Sources */,
 				BCC562261C23AADD00105089 /* main.c in Sources */,

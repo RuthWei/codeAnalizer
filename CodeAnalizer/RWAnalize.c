@@ -9,7 +9,7 @@
 #include "RWAnalize.h"
 #include "RWStack.h"
 #include "RWLine.h"
-#include "RWFunction.h"
+//#include "RWFunction.h"
 #include "RWMenu.h"
 
 //分析文件类型，c, c++, oc, 头文件
